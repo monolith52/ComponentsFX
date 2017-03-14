@@ -25,6 +25,7 @@ class Controller {
         listView.items.add(checklistview.Main::class)
         listView.items.add(checktreeview.Main::class)
         listView.items.add(customfield.Main::class)
+        listView.items.add(maskerpane.Main::class)
         listView.cellFactory = Callback { ClassCell() }
     }
 

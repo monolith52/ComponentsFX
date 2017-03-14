@@ -1,7 +1,10 @@
 package breadcrumbbar
 
 import javafx.fxml.FXML
+import javafx.scene.control.Button
 import javafx.scene.control.TreeItem
+import javafx.scene.image.Image
+import javafx.scene.image.ImageView
 import org.controlsfx.control.BreadCrumbBar
 
 
@@ -16,17 +19,15 @@ class Controller {
         val item2 = TreeItem("アイテム2")
         val item11 = TreeItem("アイテム11")
         val item12 = TreeItem("アイテム12")
-        item1.children.add(item11)
-        item1.children.add(item12)
-        root.children.add(item1)
-        root.children.add(item2)
+        item1.children.addAll(item11, item12)
+        root.children.addAll(item1, item2)
         bar.selectedCrumb = item11
 
         bar.isAutoNavigationEnabled = true
         bar.setOnCrumbAction { event ->
-            val source = event.source as BreadCrumbBar<String>
-            val item = event.selectedCrumb
-            val value = item.value
+//            val source = event.source as BreadCrumbBar<String>
+//            val item = event.selectedCrumb
+//            val value = item.value
         }
     }
 
@@ -39,18 +40,13 @@ class Controller {
 //        val item2 = TreeItem(Image("breadcrumbbar/item2.png"))
 //        val item11 = TreeItem(Image("breadcrumbbar/item11.png"))
 //        val item12 = TreeItem(Image("breadcrumbbar/item12.png"))
-//        item1.children.add(item11)
-//        item1.children.add(item12)
-//        root.children.add(item1)
-//        root.children.add(item2)
+//        item1.children.addAll(item11, item12)
+//        root.children.addAll(item1, item2)
 //
 //        bar.selectedCrumb = item11
 //        val factory = bar.crumbFactory
 //        bar.setCrumbFactory { item ->
-//            val button = factory.call(item)
-//            button.text = ""
-//            button.graphic = ImageView(item.value)
-//            button
+//            Button("", ImageView(item.value))
 //        }
 //    }
 
