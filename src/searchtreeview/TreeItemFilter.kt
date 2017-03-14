@@ -14,7 +14,7 @@ import java.util.function.Predicate
  */
 class TreeItemFilter<T>(root: TreeItem<T>) {
 
-    private data class Relation<T>(val item: TreeItem<T>, val parent: TreeItem<T>)
+    private data class Relation<T>(val parent: TreeItem<T>, val items: List<TreeItem<T>>)
     private val relations: List<Relation<T>>
     private var _searchProperty: ObservableStringValue? = null
     val searchProperty: ObservableStringValue?
@@ -34,31 +34,27 @@ class TreeItemFilter<T>(root: TreeItem<T>) {
     private fun buildRelations(item: TreeItem<T>): List<Relation<T>> {
         val list = mutableListOf<Relation<T>>()
         item.children.forEach {list.addAll(buildRelations(it))}
-        item.children.forEach {list.add(Relation<T>(it, item))}
+        if (item.children.isNotEmpty()) list.add(Relation(item, mutableListOf<TreeItem<T>>( *item.children.toTypedArray() )))
 
         return list
     }
 
     private fun updateRelations() {
         val isWildcard = _searchProperty?.value?.trim()?.isEmpty() ?: true
-        var index = 0
-        var preParent: TreeItem<T>? = null
 
         relations.forEach { relation ->
-            if (preParent != relation.parent) index = 0
-            val matched = isWildcard || predicate.test(relation.item)
-            val found = (relation.parent.children.find { it === relation.item } != null)
+            var index = 0
+            relation.items.forEach { item ->
+                val matched = isWildcard || predicate.test(item)
+                val found = (relation.parent.children.find { it === item } != null)
 
-            // 検索文字にヒットしていれば表示
-            // 表示中の子要素があれば無条件表示
-            // relationsは深い順にソート済みなので子要素は全て判別済み
-            if (matched || relation.item.children.size > 0) {
-                if (!found) relation.parent.children.add(index, relation.item)
-                index++
-            } else {
-                relation.parent.children.remove(relation.item)
+                if (matched || item.children.isNotEmpty()) {
+                    if (!found) relation.parent.children.add(index, item)
+                    index++
+                } else {
+                    relation.parent.children.remove(item)
+                }
             }
-            preParent = relation.parent
         }
     }
 }
