@@ -59,7 +59,7 @@ class TreeItemFilter<T>(root: TreeItem<T>) {
     private fun buildRelations(item: TreeItem<T>): List<Relation<T>> {
         val list = mutableListOf<Relation<T>>()
         item.children.forEach {list.addAll(buildRelations(it))}
-        if (item.children.isNotEmpty()) list.add(Relation(item, mutableListOf<TreeItem<T>>( *item.children.toTypedArray() )))
+        if (item.children.isNotEmpty()) list.add(Relation(item, item.children.toTypedArray().toList()))
 
         return list
     }
